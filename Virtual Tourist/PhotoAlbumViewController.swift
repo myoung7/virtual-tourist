@@ -42,10 +42,11 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
-        let fetchedResult = NSFetchRequest(entityName: "Photo")
-        fetchedResult.sortDescriptors = [NSSortDescriptor(key: "imageURL", ascending: true)]
+        let fetchRequest = NSFetchRequest(entityName: "Photo")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "imageURL", ascending: true)]
+        fetchRequest.predicate = NSPredicate(format: "pin == %@", self.currentPin!)
         
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchedResult, managedObjectContext: self.sharedContext, sectionNameKeyPath: nil, cacheName: nil)
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.sharedContext, sectionNameKeyPath: nil, cacheName: nil)
         
         return fetchedResultsController
     }()
@@ -95,7 +96,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
         
         //Checks to see if there are already photo links fetched for the given pin. If there are none, it will go ahead and fetch the links to those photos.
         
-        if fetchedResultsController.sections![0].numberOfObjects == 0 {
+        if currentPin!.photos.isEmpty {
             FlickrClient.sharedInstance().getNewPhotosFromPin(currentPin!, context: sharedContext) { (success, errorString) -> Void in
                 guard errorString != nil else {
                     print(errorString)
@@ -120,8 +121,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       let sectionInfo = self.fetchedResultsController.sections![section]
-            return sectionInfo.numberOfObjects
+        return currentPin!.photos.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {

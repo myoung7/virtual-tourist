@@ -17,6 +17,5 @@ Replace value "INSERT_FLICKR_API_KEY_HERE" with your own Flickr API Key.
 Currently in a beta stage. There are quite a few issues that need to be rectified.
 
 ## Known Issues
-- When loading a pin, the Photo Album View Controller displays every image that's ever been loaded.
 - After placing a pin, have to tap and load a pin once in order to drag it.
 - Pins don't load upon opening app.

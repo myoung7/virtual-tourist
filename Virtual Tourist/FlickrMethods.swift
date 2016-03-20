@@ -17,6 +17,7 @@ extension FlickrClient {
     typealias resultImageErrorStringCompletionHandler = (resultImage: UIImage?, errorString: String?) -> Void
     
     func getNewPhotosFromPin(pin: Pin, context: NSManagedObjectContext, completionHandler: successErrorStringCompletionHandler) {
+        
         let parameters = [
             ParameterKeys.Latitude: pin.latitude,
             ParameterKeys.Longitude: pin.longitude,
@@ -48,7 +49,8 @@ extension FlickrClient {
                     Photo.Keys.Identifier: item[ResponseKeys.ID]!
                 ]
                 
-                let _ = Photo(dictionary: dictionary, context: context)
+                let photo = Photo(dictionary: dictionary, context: context)
+                photo.pin = pin
             }
             completionHandler(success: true, errorString: nil)
         }
