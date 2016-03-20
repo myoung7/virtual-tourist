@@ -98,4 +98,13 @@ extension MapViewController {
         
         return annotation
     }
+    
+    func loadMapViewPins(pins: [Pin]) {
+        for item in pins {
+            let annotation = createNewAnnotationFromPin(item)
+            annotation.pin = item
+            mapView.addAnnotation(annotation)
+        }
+    }
+    
 }

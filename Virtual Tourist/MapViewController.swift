@@ -54,6 +54,17 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         mapView.delegate = self
 //        longPressGesture.delegate = self
         fetchedResultsController.delegate = self
+        
+        do {
+           try fetchedResultsController.performFetch()
+        } catch {
+            
+        }
+        
+        if let arrayOfPins = fetchedResultsController.fetchedObjects as? [Pin] {
+            loadMapViewPins(arrayOfPins)
+        }
+        
         if let mapDataArray = loadMapViewData() {
             if mapDataArray.count > 0 {
                 lastSavedLocation = mapDataArray[0]
