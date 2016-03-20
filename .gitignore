@@ -36,6 +36,8 @@
 ehthumbs.db
 Thumbs.db
 
-# Specific files #
-##################
+# Specific files/folders #
+##########################
 Keys.plist
+**/xcuserdata
+*.xcuserstate
