@@ -15,10 +15,12 @@ class Photo: NSManagedObject {
     struct Keys {
         static let ImageURL = "imageURL"
         static let Identifier = "identifierString"
+        static let ImageFilePath = "imageFilePath"
     }
     
     @NSManaged var imageURL: String
     @NSManaged var identifierString: String
+    
     @NSManaged var pin: Pin?
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
@@ -34,13 +36,26 @@ class Photo: NSManagedObject {
     }
     
     var photoImage: UIImage? {
-        
-        get {
-            return FlickrClient.Caches.imageCache.imageWithIdentifier(identifierString)
+
+            let imagePath = ImageHandler.sharedInstance.generateImagePathURL(identifierString)
+            print(NSFileManager.defaultManager().fileExistsAtPath(imagePath.path!))
+            if let image = UIImage(contentsOfFile: imagePath.path!) {
+                return image
+            } else {
+                return nil
+            }
+    }
+    
+    // MARK: Delete the associated image file when the Photo managed object is deleted.
+    
+    override func prepareForDeletion() {
+
+        do {
+            try NSFileManager.defaultManager().removeItemAtURL(ImageHandler.sharedInstance.generateImagePathURL(identifierString))
+            print("Image deleted!")
+        } catch {
+            print("Whoops...")
         }
         
-        set {
-            FlickrClient.Caches.imageCache.storeImage(newValue, withIdentifier: identifierString)
-        }
     }
 }

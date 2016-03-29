@@ -42,13 +42,13 @@ extension FlickrClient {
                     ResponseKeys.Secret: item[ResponseKeys.Secret]!,
                 ]
                 
-                
+                let imageURL = self.generateFlickrImageURL(imageURLParameters)
                 
                 let dictionary: [String: AnyObject] = [
-                    Photo.Keys.ImageURL: self.generateFlickrImageURL(imageURLParameters),
-                    Photo.Keys.Identifier: item[ResponseKeys.ID]!
+                    Photo.Keys.ImageURL: imageURL,
+                    Photo.Keys.Identifier: NSURL(fileURLWithPath: imageURL).lastPathComponent!
                 ]
-                
+
                 let photo = Photo(dictionary: dictionary, context: context)
                 photo.pin = pin
             }
@@ -69,7 +69,8 @@ extension FlickrClient {
             }
 
             let image = UIImage(data: data!)
-            photo.photoImage = image
+            ImageHandler.sharedInstance.storeImageWithIdentifier(url.lastPathComponent!, image: image!)
+            CoreDataStackManager.sharedInstance().saveContext()
             
             completionHandler(resultImage: image, errorString: nil)
         }

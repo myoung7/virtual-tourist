@@ -121,7 +121,8 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return currentPin!.photos.count
+        let sectionInfo = self.fetchedResultsController.sections![section]
+        return sectionInfo.numberOfObjects
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -195,10 +196,24 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         imageCollectionView.performBatchUpdates({
+
             self.imageCollectionView.insertItemsAtIndexPaths(self.insertedPaths)
+            
             self.imageCollectionView.deleteItemsAtIndexPaths(self.deletedPaths)
+            
             self.imageCollectionView.reloadItemsAtIndexPaths(self.updatedPaths)
-            }, completion: nil)
+            
+            }, completion: { _ in
+                CoreDataStackManager.sharedInstance().saveContext()
+//                    for index in self.deletedPaths {
+//                        if let photo = self.fetchedResultsController.objectAtIndexPath(index) as? Photo {
+//                            ImageCache().deleteImageWithIdentifier(photo.identifierString)
+//                            print("Deleted image at \(index)")
+//                        }
+//                    }
+                print("All done!")
+            }
+        )
     }
     
     func configureCell(cell: CollectionViewCell, indexPath: NSIndexPath) {
@@ -206,6 +221,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
         let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
         
         guard photo.photoImage == nil else {
+            print("Already loaded!")
             cell.imageView.image = photo.photoImage
             cell.activityIndicator.stopAnimating()
             return
@@ -220,17 +236,17 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
                 return
             }
             
-            guard let image = resultImage else {
-                print("Error: Could not load image for cell.")
-                dispatch_async(dispatch_get_main_queue()) {
-                    cell.activityIndicator.stopAnimating()
-                }
-                return
-            }
+//            guard let image = resultImage else {
+//                print("Error: Could not load image for cell.")
+//                dispatch_async(dispatch_get_main_queue()) {
+//                    cell.activityIndicator.stopAnimating()
+//                }
+//                return
+//            }
             
             dispatch_async(dispatch_get_main_queue()) {
                 cell.activityIndicator.stopAnimating()
-                cell.imageView.image = image
+                cell.imageView.image = photo.photoImage
             }
             
         }
