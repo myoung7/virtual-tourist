@@ -22,10 +22,6 @@ class FlickrClient {
         session = NSURLSession.sharedSession()
     }
     
-    struct Caches {
-        static let imageCache = ImageCache()
-    }
-    
     var sharedContext: NSManagedObjectContext {
         return CoreDataStackManager.sharedInstance().managedObjectContext
     }
