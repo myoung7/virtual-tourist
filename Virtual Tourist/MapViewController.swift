@@ -14,12 +14,32 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     
     @IBOutlet weak var mapView: MKMapView!
     
+    @IBOutlet weak var deleteButton: UIBarButtonItem!
+    
+    @IBOutlet weak var deleteWarningLabel: UILabel!
+    
+    @IBAction func deleteButtonPressed(sender: UIBarButtonItem) {
+        
+        if deleteModeEnabled == false {
+            deleteModeEnabled = true
+            deleteWarningLabel.hidden = false
+            deleteButton.title = "Cancel"
+        } else {
+            deleteModeEnabled = false
+            deleteWarningLabel.hidden = true
+            deleteButton.title = "Delete"
+        }
+        
+    }
+    
+    
     var isAbleToAddAnnotation = true
+    var pinWasDragged = false
+    var deleteModeEnabled = false
+    
     var annotationToBeAdded: MapViewAnnotation?
     
     var selectedPin: Pin?
-
-    var pinWasDragged = false
     
     var lastSavedLocation: MapPosition?
     
@@ -126,6 +146,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         view.setSelected(true, animated: false)
 
         let annotation = view.annotation as! MapViewAnnotation
+        
+        if deleteModeEnabled {
+            mapView.removeAnnotation(annotation)
+            sharedContext.deleteObject(annotation.pin)
+            CoreDataStackManager.sharedInstance().saveContext()
+            return
+        }
         
         if pinWasDragged {
             pinWasDragged = false
