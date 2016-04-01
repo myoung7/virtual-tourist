@@ -18,3 +18,4 @@ Currently in a beta stage. There are quite a few issues that need to be rectifie
 
 ## Known Issues
 - After placing a pin, have to tap and load a pin once in order to drag it.
+- Tapping the "New Collection" button after selecting a Pin may return an empty Collection View.

@@ -18,6 +18,9 @@ class Pin: NSManagedObject {
     
     @NSManaged var latitude: NSNumber
     @NSManaged var longitude: NSNumber
+    
+    @NSManaged var maxNumberOfPages: NSNumber?
+    
     @NSManaged var photos: [Photo]
     
     var alreadyDownloadedAllPhotos: Bool {

@@ -47,6 +47,7 @@ extension FlickrClient {
         static let NoJSONCallback = "nojsoncallback"
         static let Extras = "extras"
         static let PerPage = "per_page"
+        static let Page = "page"
     }
     
     struct ResponseKeys {
@@ -55,6 +56,7 @@ extension FlickrClient {
         static let ID = "id"
         static let ServerID = "server"
         static let Secret = "secret"
+        static let Pages = "pages"
     }
     
     struct ImageURLModifiers {

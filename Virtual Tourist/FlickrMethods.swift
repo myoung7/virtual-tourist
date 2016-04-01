@@ -18,11 +18,24 @@ extension FlickrClient {
     
     func getNewPhotosFromPin(pin: Pin, context: NSManagedObjectContext, completionHandler: successErrorStringCompletionHandler) {
         
+        var selectedPage = 1
+        
+        if pin.maxNumberOfPages != nil {
+            print()
+            let maxNumber = min(Int(pin.maxNumberOfPages!), numberOfPagesLimit)
+            print("max number = \(maxNumber)")
+            let randomNumber = max(arc4random_uniform(UInt32(maxNumber)), 1)
+            print("random number = \(randomNumber)")
+            selectedPage = Int(randomNumber)
+        }
+        print("selected page \(selectedPage)")
+        
         let parameters = [
             ParameterKeys.Latitude: pin.latitude,
             ParameterKeys.Longitude: pin.longitude,
             ParameterKeys.DistanceRadius: 20,
-            ParameterKeys.PerPage: photosPerPageLimit
+            ParameterKeys.PerPage: photosPerPageLimit,
+            ParameterKeys.Page: selectedPage
         ]
         
         taskForGETMethod(method: Methods.PhotoSearch, parameters: parameters) { (result, error) -> Void in
@@ -30,10 +43,13 @@ extension FlickrClient {
                 completionHandler(success: false, errorString: "Error in getNewPhotosFromPin")
                 return
             }
-            
+
             let photoDictionary = result[ResponseKeys.PhotoDictionary] as! NSDictionary
+            let maxPages = photoDictionary[ResponseKeys.Pages] as! NSNumber
             
             let photoArray = photoDictionary[ResponseKeys.Photo] as! [[String: AnyObject]]
+            
+            pin.maxNumberOfPages = maxPages
             
             for item in photoArray {
                 let imageURLParameters: Dictionary<String, AnyObject> = [
@@ -50,8 +66,8 @@ extension FlickrClient {
                 ]
 
                 let photo = Photo(dictionary: dictionary, context: context)
-                photo.pin = pin
-                CoreDataStackManager.sharedInstance().saveContext()
+                print("Created Photo!")
+                photo.pin = pin  
                 
                 self.getImageForPhoto(photo) { (_, errorString) in
                     guard errorString == nil else {
@@ -59,7 +75,6 @@ extension FlickrClient {
                         return
                     }
                     print("Successfully loaded photo.")
-                    CoreDataStackManager.sharedInstance().saveContext()
                 }
             }
             completionHandler(success: true, errorString: nil)
@@ -80,7 +95,6 @@ extension FlickrClient {
 
             let image = UIImage(data: data!)
             ImageHandler.sharedInstance.storeImageWithIdentifier(url.lastPathComponent!, image: image!)
-            CoreDataStackManager.sharedInstance().saveContext()
             
             completionHandler(resultImage: image, errorString: nil)
         }

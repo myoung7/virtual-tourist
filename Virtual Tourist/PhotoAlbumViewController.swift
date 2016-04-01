@@ -11,8 +11,6 @@ import UIKit
 import MapKit
 import CoreData
 
-//TODO: Images from every Pin appear within this controller. Need to fix.
-
 class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, NSFetchedResultsControllerDelegate, MKMapViewDelegate {
     
     @IBOutlet weak var imageCollectionView: UICollectionView!
@@ -22,6 +20,8 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
     @IBOutlet weak var bottomToolbar: UIToolbar!
     
     @IBOutlet weak var mapView: MKMapView!
+    
+    @IBOutlet weak var mainActivityIndicator: UIActivityIndicatorView!
     
     var currentPin: Pin?
     
@@ -54,7 +54,44 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
     @IBAction func bottomActionButtonPressed(sender: UIBarButtonItem) {
         
         if sender.title == "New Collection" {
+            bottomActionButton.enabled = false
+            mainActivityIndicator.hidden = false
+            mainActivityIndicator.startAnimating()
+            if let objects = fetchedResultsController.fetchedObjects {
+                for item in objects {
+                    sharedContext.deleteObject(item as! Photo)
+                }
+                self.saveContext()
+            }
             
+            FlickrClient.sharedInstance().getNewPhotosFromPin(currentPin!, context: sharedContext){ (success, errorString) in
+                guard errorString == nil else {
+                    print(errorString)
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.mainActivityIndicator.stopAnimating()
+                        self.mainActivityIndicator.hidden = true
+                        self.bottomActionButton.enabled = true
+                    })
+                    return
+                }
+                
+                if success {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.saveContext()
+                        try! self.fetchedResultsController.performFetch()
+                        self.imageCollectionView.reloadData()
+                        print("Success!")
+                        //TODO: Finish setting up Collection View with results
+                    }
+                } else {
+                    print("No success.")
+                }
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.mainActivityIndicator.stopAnimating()
+                    self.mainActivityIndicator.hidden = true
+                    self.bottomActionButton.enabled = true
+                })
+            }
         }
         
         if sender.title == "Delete Selected Photos" {
@@ -62,7 +99,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
                 let photo = fetchedResultsController.objectAtIndexPath(index) as! Photo
                 sharedContext.deleteObject(photo)
             }
-            CoreDataStackManager.sharedInstance().saveContext()
+            self.saveContext()
             selectedPhotoIndexArray.removeAll()
         }
         
@@ -98,24 +135,21 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
         
         if currentPin!.photos.isEmpty {
             FlickrClient.sharedInstance().getNewPhotosFromPin(currentPin!, context: sharedContext) { (success, errorString) -> Void in
-                guard errorString != nil else {
+                guard errorString == nil else {
                     print(errorString)
                     return
                 }
                 
                 if success {
                     dispatch_async(dispatch_get_main_queue()) {
+                        self.saveContext()
                         try! self.fetchedResultsController.performFetch()
-                        self.imageCollectionView.reloadData()
                         print("Success!")
                         //TODO: Finish setting up Collection View with results
                     }
                 } else {
                     print("No success.")
                 }
-                self.saveContext()
-                self.imageCollectionView.reloadData()
-                
             }
         }
     }

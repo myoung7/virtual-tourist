@@ -93,6 +93,7 @@
                             </mapView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="3uP-oR-jLr">
                                 <rect key="frame" x="0.0" y="182" width="600" height="374"/>
+                                <color key="backgroundColor" red="0.23921568630000001" green="0.23137254900000001" blue="0.20392156859999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="aUm-nV-WFX">
                                     <size key="itemSize" width="112" height="101"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -148,14 +149,19 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Tzu-XY-v0N"/>
                                 </items>
                             </toolbar>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="F2q-Kr-ipB">
+                                <rect key="frame" x="282" y="282" width="37" height="37"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="3uP-oR-jLr" secondAttribute="trailing" id="1VE-9V-55z"/>
+                            <constraint firstItem="F2q-Kr-ipB" firstAttribute="centerX" secondItem="itW-kp-WLe" secondAttribute="centerX" id="5aG-UG-ki4"/>
                             <constraint firstItem="3uP-oR-jLr" firstAttribute="leading" secondItem="itW-kp-WLe" secondAttribute="leading" id="9Ox-Hk-zbf"/>
                             <constraint firstAttribute="trailing" secondItem="0he-Af-NXg" secondAttribute="trailing" id="EeY-uh-U1b"/>
                             <constraint firstItem="3uP-oR-jLr" firstAttribute="top" secondItem="3LS-bG-RRm" secondAttribute="bottom" id="KKs-1c-kgX"/>
                             <constraint firstItem="3LS-bG-RRm" firstAttribute="leading" secondItem="itW-kp-WLe" secondAttribute="leading" id="MP0-0F-JEN"/>
+                            <constraint firstItem="F2q-Kr-ipB" firstAttribute="centerY" secondItem="itW-kp-WLe" secondAttribute="centerY" id="Q95-U4-hYF"/>
                             <constraint firstItem="0he-Af-NXg" firstAttribute="top" secondItem="3uP-oR-jLr" secondAttribute="bottom" id="QsQ-Gx-LeD"/>
                             <constraint firstItem="3LS-bG-RRm" firstAttribute="top" secondItem="an4-ti-8z3" secondAttribute="bottom" id="YWV-Tf-WxN"/>
                             <constraint firstItem="b8H-oG-eb0" firstAttribute="top" secondItem="0he-Af-NXg" secondAttribute="bottom" id="aFc-nC-Sc8"/>
@@ -174,6 +180,7 @@
                         <outlet property="bottomActionButton" destination="iDY-FI-MRE" id="eQl-SQ-DcV"/>
                         <outlet property="bottomToolbar" destination="0he-Af-NXg" id="oJe-pi-suW"/>
                         <outlet property="imageCollectionView" destination="3uP-oR-jLr" id="f7o-Jm-3bO"/>
+                        <outlet property="mainActivityIndicator" destination="F2q-Kr-ipB" id="VCY-fY-xzm"/>
                         <outlet property="mapView" destination="3LS-bG-RRm" id="E9r-lR-STl"/>
                     </connections>
                 </viewController>
