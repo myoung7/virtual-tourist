@@ -51,6 +51,16 @@ extension FlickrClient {
 
                 let photo = Photo(dictionary: dictionary, context: context)
                 photo.pin = pin
+                CoreDataStackManager.sharedInstance().saveContext()
+                
+                self.getImageForPhoto(photo) { (_, errorString) in
+                    guard errorString == nil else {
+                        print(errorString)
+                        return
+                    }
+                    print("Successfully loaded photo.")
+                    CoreDataStackManager.sharedInstance().saveContext()
+                }
             }
             completionHandler(success: true, errorString: nil)
         }

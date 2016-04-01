@@ -110,7 +110,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
                     print("Error: FlickrClient failed to provide photos for current Pin.")
                     return
                 }
-                
+                print("Finished Loading!")
+                CoreDataStackManager.sharedInstance().saveContext()
             }
         }
         
