@@ -66,4 +66,8 @@ extension FlickrClient {
         static let Medium = "z"
     }
     
+    struct ErrorMessages {
+        static let NoImagesReturned = "ERROR: No images returned."
+    }
+    
 }

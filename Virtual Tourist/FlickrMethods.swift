@@ -51,6 +51,11 @@ extension FlickrClient {
             
             pin.maxNumberOfPages = maxPages
             
+            guard !photoArray.isEmpty else {
+                completionHandler(success: false, errorString: ErrorMessages.NoImagesReturned)
+                return
+            }
+            
             for item in photoArray {
                 let imageURLParameters: Dictionary<String, AnyObject> = [
                     ResponseKeys.ID: item[ResponseKeys.ID]!,

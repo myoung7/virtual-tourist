@@ -17,7 +17,7 @@ class FlickrClient {
     var session: NSURLSession
     
     let photosPerPageLimit = 40
-    let numberOfPagesLimit = 100
+    let numberOfPagesLimit = 20
     
     init() {
         session = NSURLSession.sharedSession()

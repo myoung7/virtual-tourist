@@ -25,6 +25,8 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
     
     var currentPin: Pin?
     
+    var gettingNewImages = false
+    
     var blockOperations = [NSBlockOperation]()
     
     var selectedPhotoIndexArray = [NSIndexPath]()
@@ -54,6 +56,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
     @IBAction func bottomActionButtonPressed(sender: UIBarButtonItem) {
         
         if sender.title == "New Collection" {
+            gettingNewImages = true
             bottomActionButton.enabled = false
             mainActivityIndicator.hidden = false
             mainActivityIndicator.startAnimating()
@@ -63,35 +66,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
                 }
                 self.saveContext()
             }
-            
-            FlickrClient.sharedInstance().getNewPhotosFromPin(currentPin!, context: sharedContext){ (success, errorString) in
-                guard errorString == nil else {
-                    print(errorString)
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.mainActivityIndicator.stopAnimating()
-                        self.mainActivityIndicator.hidden = true
-                        self.bottomActionButton.enabled = true
-                    })
-                    return
-                }
-                
-                if success {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.saveContext()
-                        try! self.fetchedResultsController.performFetch()
-                        self.imageCollectionView.reloadData()
-                        print("Success!")
-                        //TODO: Finish setting up Collection View with results
-                    }
-                } else {
-                    print("No success.")
-                }
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.mainActivityIndicator.stopAnimating()
-                    self.mainActivityIndicator.hidden = true
-                    self.bottomActionButton.enabled = true
-                })
-            }
+            getNewImages()
         }
         
         if sender.title == "Delete Selected Photos" {
@@ -101,6 +76,10 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
             }
             self.saveContext()
             selectedPhotoIndexArray.removeAll()
+            
+            bottomToolbar.barTintColor = UIColor.whiteColor()
+            bottomActionButton.tintColor = UIColor.blueColor()
+            bottomActionButton.title = "New Collection"
         }
         
     }
@@ -251,6 +230,10 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func configureCell(cell: CollectionViewCell, indexPath: NSIndexPath) {
+        
+        if gettingNewImages == true {
+            cell.imageView.image = nil
+        }
 
         let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
         
@@ -303,6 +286,45 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
             
             mapView.setRegion(savedRegion, animated: true)
         }
+    
+    func getNewImages() {
+        FlickrClient.sharedInstance().getNewPhotosFromPin(currentPin!, context: sharedContext){ (success, errorString) in
+            guard errorString == nil else {
+                if errorString == FlickrClient.ErrorMessages.NoImagesReturned {
+                    print(errorString!)
+                    self.getNewImages()
+                    return
+                }
+                print(errorString)
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.mainActivityIndicator.stopAnimating()
+                    self.mainActivityIndicator.hidden = true
+                    self.bottomActionButton.enabled = true
+                })
+                return
+            }
+            
+            if success {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.saveContext()
+                    self.gettingNewImages = false
+                    try! self.fetchedResultsController.performFetch()
+                    self.imageCollectionView.reloadData()
+                    print("Success!")
+                    //TODO: Finish setting up Collection View with results
+                }
+            } else {
+                print("No success.")
+            }
+            dispatch_async(dispatch_get_main_queue(), {
+                self.gettingNewImages = false
+                self.mainActivityIndicator.stopAnimating()
+                self.mainActivityIndicator.hidden = true
+                self.bottomActionButton.enabled = true
+            })
+        }
+
+    }
     
 //  // Holding on to this code for future reference.
 //    //http://stackoverflow.com/questions/20554137/nsfetchedresultscontollerdelegate-for-collectionview
