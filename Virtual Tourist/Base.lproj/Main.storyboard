@@ -93,8 +93,8 @@
                             </mapView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="3uP-oR-jLr">
                                 <rect key="frame" x="0.0" y="182" width="600" height="374"/>
-                                <color key="backgroundColor" red="0.23921568630000001" green="0.23137254900000001" blue="0.20392156859999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="aUm-nV-WFX">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="aUm-nV-WFX">
                                     <size key="itemSize" width="112" height="101"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -109,7 +109,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3qQ-qx-Sdo">
-                                                    <rect key="frame" x="8" y="8" width="96" height="85"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="112" height="101"/>
                                                 </imageView>
                                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="TWp-7a-dYx">
                                                     <rect key="frame" x="46" y="41" width="20" height="20"/>
@@ -119,12 +119,12 @@
                                         </view>
                                         <color key="backgroundColor" red="0.99215686270000003" green="0.82897490610000002" blue="0.61040561250000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
-                                            <constraint firstItem="3qQ-qx-Sdo" firstAttribute="trailing" secondItem="htM-3N-C3K" secondAttribute="trailingMargin" id="Dw2-VB-Web"/>
+                                            <constraint firstItem="3qQ-qx-Sdo" firstAttribute="trailing" secondItem="htM-3N-C3K" secondAttribute="trailingMargin" constant="8" id="Dw2-VB-Web"/>
                                             <constraint firstItem="TWp-7a-dYx" firstAttribute="centerX" secondItem="htM-3N-C3K" secondAttribute="centerX" id="egc-ZM-TA6"/>
-                                            <constraint firstItem="3qQ-qx-Sdo" firstAttribute="top" secondItem="htM-3N-C3K" secondAttribute="topMargin" id="gba-Us-vGZ"/>
+                                            <constraint firstItem="3qQ-qx-Sdo" firstAttribute="top" secondItem="htM-3N-C3K" secondAttribute="topMargin" constant="-8" id="gba-Us-vGZ"/>
                                             <constraint firstItem="TWp-7a-dYx" firstAttribute="centerY" secondItem="htM-3N-C3K" secondAttribute="centerY" id="kpk-a2-ZGy"/>
-                                            <constraint firstItem="3qQ-qx-Sdo" firstAttribute="bottom" secondItem="htM-3N-C3K" secondAttribute="bottomMargin" id="umD-6d-emd"/>
-                                            <constraint firstItem="3qQ-qx-Sdo" firstAttribute="leading" secondItem="htM-3N-C3K" secondAttribute="leadingMargin" id="zef-Bk-8qn"/>
+                                            <constraint firstItem="3qQ-qx-Sdo" firstAttribute="bottom" secondItem="htM-3N-C3K" secondAttribute="bottomMargin" constant="8" id="umD-6d-emd"/>
+                                            <constraint firstItem="3qQ-qx-Sdo" firstAttribute="leading" secondItem="htM-3N-C3K" secondAttribute="leadingMargin" constant="-8" id="zef-Bk-8qn"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="activityIndicator" destination="TWp-7a-dYx" id="YTf-Ox-Ke1"/>

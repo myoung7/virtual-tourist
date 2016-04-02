@@ -154,7 +154,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
         }
         
         cell.imageView.alpha = 1.0
-        cell.backgroundColor = UIColor.orangeColor()
+        cell.backgroundColor = UIColor.lightGrayColor()
         return cell
     }
     
@@ -165,7 +165,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
         for item in selectedPhotoIndexArray {
             if item == indexPath {
                 cell.imageView.alpha = 1.0
-                cell.backgroundColor = UIColor.orangeColor()
+                cell.backgroundColor = UIColor.lightGrayColor()
                 selectedPhotoIndexArray.removeAtIndex(selectedPhotoIndexArray.indexOf(item)!)
                 if selectedPhotoIndexArray.count == 0 {
                     bottomToolbar.barTintColor = UIColor.whiteColor()
@@ -184,9 +184,12 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
         bottomActionButton.title = "Delete Selected Photos"
     }
     
-    //TODO: Fix layout of Collection View Cells
-    
-    //
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        let width = (view.frame.width / 3) - 1
+        let height = width
+        
+        return CGSize(width: width, height: height)
+    }
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         insertedPaths = []
