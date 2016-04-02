@@ -38,20 +38,21 @@
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <gestureRecognizers/>
                             </mapView>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap on the pins you wish to remove." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jJX-KY-uSQ">
-                                <rect key="frame" x="163" y="559" width="274" height="21"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap on the pins you wish to remove" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jJX-KY-uSQ">
+                                <rect key="frame" x="165" y="82" width="270" height="21"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="sVr-Rc-Obw" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="4SU-AQ-f1K"/>
+                            <constraint firstItem="jJX-KY-uSQ" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="18" id="Ft6-wv-eqF"/>
                             <constraint firstItem="jJX-KY-uSQ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="IfQ-oF-08a"/>
                             <constraint firstItem="sVr-Rc-Obw" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="KFg-ec-w8x"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="sVr-Rc-Obw" secondAttribute="bottom" id="iv4-nc-P1r"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="jJX-KY-uSQ" secondAttribute="bottom" constant="20" id="pIm-BR-9ST"/>
                             <constraint firstAttribute="trailing" secondItem="sVr-Rc-Obw" secondAttribute="trailing" id="qIy-w5-xeQ"/>
                         </constraints>
                     </view>

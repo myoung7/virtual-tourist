@@ -32,9 +32,7 @@ class ImageHandler {
         let fileURL = generateImagePathURL(identifier)
         
         if let data = UIImageJPEGRepresentation(image, 1) {
-            let status = data.writeToFile(fileURL.path!, atomically: true)
-            print("Store status is \(status)")
-            print(fileURL.path)
+            let _ = data.writeToFile(fileURL.path!, atomically: true)
             return fileURL
         }
         return nil

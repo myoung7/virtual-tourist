@@ -54,7 +54,7 @@ extension MapViewController {
     }
     
     func loadMapViewData() -> [MapPosition]? {
-//        fetchedResultsController.fetchRequest
+
         let fetchRequest = NSFetchRequest(entityName: "MapPosition")
         
         var mapPositionArray = [MapPosition]()
@@ -81,8 +81,6 @@ extension MapViewController {
             Pin.Keys.Latitude: locationCoordinate.latitude,
             Pin.Keys.Longitude: locationCoordinate.longitude,
         ]
-        
-        print(dictionary)
         
         let newPin = Pin(dictionary: dictionary, context: sharedContext)
         

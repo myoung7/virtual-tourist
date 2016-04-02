@@ -23,11 +23,16 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         if deleteModeEnabled == false {
             deleteModeEnabled = true
             deleteWarningLabel.hidden = false
+            deleteButton.tintColor = UIColor.whiteColor()
             deleteButton.title = "Cancel"
+            
+            navigationController?.navigationBar.barStyle = .BlackTranslucent
         } else {
             deleteModeEnabled = false
             deleteWarningLabel.hidden = true
+            deleteButton.tintColor = nil
             deleteButton.title = "Delete"
+            navigationController?.navigationBar.barStyle = .Default
         }
         
     }
@@ -94,7 +99,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     }
     
     func longPressRecognized(sender: UIGestureRecognizer) {
-        print("Pressed!")
         if sender.state == .Began {
             let newPin = createNewPinFromTouchLocation(sender)
             let newAnnotation = createNewAnnotationFromPin(newPin)
@@ -110,18 +114,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
                     print("Error: FlickrClient failed to provide photos for current Pin.")
                     return
                 }
-                print("Finished Loading!")
                 CoreDataStackManager.sharedInstance().saveContext()
             }
         }
-        
-//        if sender.state == .Changed {
-////            if annotationToBeAdded != nil {
-////                let locationPoint = sender.locationInView(mapView)
-////                let locationCoordinate = mapView.convertPoint(locationPoint, toCoordinateFromView: mapView)
-////                annotationToBeAdded?.coordinate = locationCoordinate
-////            }
-//        }
         
         if sender.state == .Ended {
             CoreDataStackManager.sharedInstance().saveContext()
@@ -131,12 +126,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         let annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "pinView")
 
-//        annotationView.animatesDrop = true
         annotationView.draggable = true
-//        annotationView.setSelected(true, animated: false)
         annotationView.annotation = annotation
-
-//        annotationView.pinTintColor = UIColor.purpleColor()
         
         return annotationView
     }
@@ -158,7 +149,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
         if pinWasDragged {
             pinWasDragged = false
             sharedContext.deleteObject(annotation.pin)
-            print("Deleted pin")
+            print("Deleted pin {\(annotation.pin.latitude), \(annotation.pin.longitude)}")
             
             let dictionary = [
                 Pin.Keys.Latitude: annotation.coordinate.latitude,
@@ -166,12 +157,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
             ]
             
             annotation.pin = Pin(dictionary: dictionary, context: sharedContext)
-            print("Added pin")
+            print("Added pin {\(annotation.pin.latitude), \(annotation.pin.longitude)}")
             CoreDataStackManager.sharedInstance().saveContext()
         } else {
-        print("Selected Annotation View")
-        selectedPin = annotation.pin
-        performSegueWithIdentifier("showPhotoAlbumSegue", sender: self)
+            selectedPin = annotation.pin
+            performSegueWithIdentifier("showPhotoAlbumSegue", sender: self)
         }
     }
     
@@ -188,14 +178,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         print("Preparing for Segue")
-//        if segue.identifier == "showPhotoAlbumSegue" {
-        let controller = segue.destinationViewController as! PhotoAlbumViewController
-        controller.currentPin = selectedPin!
-        if controller.currentPin != nil {
-            print("currentPin is not nil!")
-        }
+        if segue.identifier == "showPhotoAlbumSegue" {
+            let controller = segue.destinationViewController as! PhotoAlbumViewController
+            controller.currentPin = selectedPin!
             print("Segue! \(segue.identifier)")
-//        }
+        }
     }
   
 }

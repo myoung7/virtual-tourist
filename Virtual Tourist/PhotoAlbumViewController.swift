@@ -78,7 +78,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
             selectedPhotoIndexArray.removeAll()
             
             bottomToolbar.barTintColor = UIColor.whiteColor()
-            bottomActionButton.tintColor = UIColor.blueColor()
+            bottomActionButton.tintColor = nil
             bottomActionButton.title = "New Collection"
         }
         
@@ -86,8 +86,6 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("View Did Load")
         
         mapView.delegate = self
         mapView.zoomEnabled = false
@@ -100,10 +98,6 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
             mapAnnotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude as CLLocationDegrees, longitude: pin.longitude as CLLocationDegrees)
             mapView.addAnnotation(mapAnnotation)
         }
-        
-        let layout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: 100, height: 100)
         
         try! fetchedResultsController.performFetch()
         
@@ -220,13 +214,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
             self.imageCollectionView.reloadItemsAtIndexPaths(self.updatedPaths)
             
             }, completion: { _ in
-                CoreDataStackManager.sharedInstance().saveContext()
-//                    for index in self.deletedPaths {
-//                        if let photo = self.fetchedResultsController.objectAtIndexPath(index) as? Photo {
-//                            ImageCache().deleteImageWithIdentifier(photo.identifierString)
-//                            print("Deleted image at \(index)")
-//                        }
-//                    }
+                self.saveContext()
                 print("All done!")
             }
         )
@@ -241,7 +229,6 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
         let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
         
         guard photo.photoImage == nil else {
-            print("Already loaded!")
             cell.imageView.image = photo.photoImage
             cell.activityIndicator.stopAnimating()
             return
@@ -255,15 +242,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
                 }
                 return
             }
-            
-//            guard let image = resultImage else {
-//                print("Error: Could not load image for cell.")
-//                dispatch_async(dispatch_get_main_queue()) {
-//                    cell.activityIndicator.stopAnimating()
-//                }
-//                return
-//            }
-            
+
             dispatch_async(dispatch_get_main_queue()) {
                 cell.activityIndicator.stopAnimating()
                 cell.imageView.image = photo.photoImage
@@ -328,99 +307,4 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
         }
 
     }
-    
-//  // Holding on to this code for future reference.
-//    //http://stackoverflow.com/questions/20554137/nsfetchedresultscontollerdelegate-for-collectionview
-//    
-//    func controllerWillChangeContent(controller: NSFetchedResultsController) {
-////        self.tableView.beginUpdates()
-//        blockOperations.removeAll(keepCapacity: false)
-//        
-//    }
-//    func controller(controller: NSFetchedResultsController,
-//        didChangeSection sectionInfo: NSFetchedResultsSectionInfo,
-//        atIndex sectionIndex: Int,
-//        forChangeType type: NSFetchedResultsChangeType) {
-//            
-//            switch type {
-//            case .Insert:
-////                self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
-//                blockOperations.append(
-//                    NSBlockOperation(block: {
-//                        self.imageCollectionView.insertSections(NSIndexSet(index: sectionIndex))
-//                    })
-//                )
-//            
-//            case .Delete:
-////                self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
-//                blockOperations.append(
-//                    NSBlockOperation(block: {
-//                        self.imageCollectionView.deleteSections(NSIndexSet(index: sectionIndex))
-//                    })
-//                )
-//            
-//            default:
-//                return
-//            }
-//    }
-//    
-//    func controllerDidChangeContent(controller: NSFetchedResultsController) {
-//        imageCollectionView.performBatchUpdates({ () -> Void in
-//            for operation in self.blockOperations {
-//                operation.start()
-//            }
-//            }) { (finished) -> Void in
-//                self.blockOperations.removeAll(keepCapacity: false)
-//                self.imageCollectionView.reloadData()
-//        }
-//    }
-//    
-//    func controller(controller: NSFetchedResultsController,
-//        didChangeObject anObject: AnyObject,
-//        atIndexPath indexPath: NSIndexPath?,
-//        forChangeType type: NSFetchedResultsChangeType,
-//        newIndexPath: NSIndexPath?) {
-//            
-//            switch type {
-//            case .Insert:
-////                tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
-////                imageCollectionView.insertItemsAtIndexPaths([newIndexPath!])
-//                blockOperations.append(
-//                    NSBlockOperation(block: {
-//                        self.imageCollectionView.insertItemsAtIndexPaths([newIndexPath!])
-//                    })
-//                )
-//                
-//            case .Delete:
-////                tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-//                blockOperations.append(
-//                    NSBlockOperation(block: {
-//                        self.imageCollectionView.deleteItemsAtIndexPaths([indexPath!])
-//                    })
-//                )
-//                
-//            case .Update:
-////                let cell = tableView.cellForRowAtIndexPath(indexPath!) as! ActorTableViewCell
-////                let movie = controller.objectAtIndexPath(indexPath!) as! Movie
-////                self.configureCell(cell, movie: movie)
-//                blockOperations.append(
-//                    NSBlockOperation(block: {
-//                        self.imageCollectionView.reloadItemsAtIndexPaths([indexPath!])
-//                    })
-//                )
-//                //TODO: Load image
-//                
-//            case .Move:
-////                tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-////                tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
-////                imageCollectionView.deleteItemsAtIndexPaths([indexPath!])
-////                imageCollectionView.insertItemsAtIndexPaths([newIndexPath!])
-//                blockOperations.append(
-//                    NSBlockOperation(block: {
-//                        self.imageCollectionView.moveItemAtIndexPath(indexPath!, toIndexPath: newIndexPath!)
-//                    })
-//                )
-//                
-//            }
-//    }
 }

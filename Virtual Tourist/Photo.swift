@@ -52,9 +52,9 @@ class Photo: NSManagedObject {
 
         do {
             try NSFileManager.defaultManager().removeItemAtURL(ImageHandler.sharedInstance.generateImagePathURL(identifierString))
-            print("Image deleted!")
+            print("Image \(identifierString) deleted!")
         } catch {
-            print("Whoops...")
+            print("ERROR: Image \(identifierString) could not be deleted.")
         }
         
     }

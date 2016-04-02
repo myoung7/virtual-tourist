@@ -31,7 +31,7 @@ class FlickrClient {
         var mutableParameters = parameters
         
         guard let apiKey = Constants.APIKey else {
-            print("Error: Could not load API Key.")
+            print("ERROR: Could not load API Key.")
             return
         }
         
