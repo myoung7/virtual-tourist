@@ -215,6 +215,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDelegate, UICo
             
             }, completion: { _ in
                 self.saveContext()
+                self.imageCollectionView.reloadData() //Reloading to correct any cells that are still shown as selected (i.e. highlighted in red)
                 print("All done!")
             }
         )
