@@ -38,7 +38,6 @@ class Photo: NSManagedObject {
     var photoImage: UIImage? {
 
             let imagePath = ImageHandler.sharedInstance.generateImagePathURL(identifierString)
-            print(NSFileManager.defaultManager().fileExistsAtPath(imagePath.path!))
             if let image = UIImage(contentsOfFile: imagePath.path!) {
                 return image
             } else {

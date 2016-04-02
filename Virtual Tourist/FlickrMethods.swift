@@ -71,7 +71,6 @@ extension FlickrClient {
                 ]
 
                 let photo = Photo(dictionary: dictionary, context: context)
-                print("Created Photo!")
                 photo.pin = pin  
                 
                 self.getImageForPhoto(photo) { (_, errorString) in
@@ -79,7 +78,7 @@ extension FlickrClient {
                         print(errorString)
                         return
                     }
-                    print("Successfully loaded photo.")
+                    print("Successfully loaded photo with identifier \(photo.identifierString)")
                 }
             }
             completionHandler(success: true, errorString: nil)

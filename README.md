@@ -18,3 +18,4 @@ Currently in a beta stage. There are quite a few issues that need to be rectifie
 
 ## Known Issues
 - After placing a pin, have to tap and load a pin once in order to drag it.
+-Image in Collection View might still be shown as selected (i.e. highlighted in red) for deletion after confirming deletion of photos. Scrolling image out of view temporarily fixes issue.
